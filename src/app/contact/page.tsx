@@ -13,8 +13,8 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        title="Contact OBUSU"
-        description="Send a message to our team and we will get back to you as soon as possible."
+        title="Contact Us"
+        description="Get in touch with your student union representatives"
       />
       <section className="py-14 sm:py-16">
         <Container>

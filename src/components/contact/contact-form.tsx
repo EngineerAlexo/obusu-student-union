@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Send } from "lucide-react";
+import { Clock3, Loader2, Mail, MapPin, Send } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   email: z.email("Please enter a valid email address."),
+  subject: z.string().min(3, "Subject must be at least 3 characters."),
   message: z.string().min(10, "Message must be at least 10 characters."),
 });
 
@@ -31,6 +32,7 @@ export function ContactForm() {
     defaultValues: {
       name: "",
       email: "",
+      subject: "",
       message: "",
     },
   });
@@ -42,7 +44,7 @@ export function ContactForm() {
       await addMessage({
         name: data.name,
         email: data.email,
-        message: data.message,
+        message: `Subject: ${data.subject}\n\n${data.message}`,
       });
       toast.success("Message submitted successfully.");
       form.reset();
@@ -55,16 +57,70 @@ export function ContactForm() {
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-5">
-      <Card className="lg:col-span-3">
-        <CardHeader>
-          <CardTitle>Send Us a Message</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <div className="space-y-8">
+      <div id="contact-info" className="scroll-mt-28 grid gap-6 lg:grid-cols-2">
+        <Card className="border-l-4 border-l-primary shadow-sm">
+          <CardHeader>
+            <CardTitle>Union Office</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
+            <p className="flex items-start gap-2">
+              <MapPin className="mt-0.5 h-4 w-4 text-primary" />
+              <span>
+                Library Building, Second Floor
+                <br />
+                Student Union Office
+                <br />
+                Oda Bultum University Main Campus
+              </span>
+            </p>
+            <p className="flex items-start gap-2">
+              <Clock3 className="mt-0.5 h-4 w-4 text-primary" />
+              <span>
+                Monday - Friday: 8:30 AM - 5:00 PM
+                <br />
+                Saturday: 10:00 AM - 2:00 PM
+              </span>
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-primary shadow-sm">
+          <CardHeader>
+            <CardTitle>Executive Committee</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <div>
+              <p className="font-semibold text-foreground">Union President</p>
+              <p>Naafri Ahmed</p>
+              <p className="mt-1 inline-flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
+                president@obu.edu.et
+              </p>
+            </div>
+            <Separator />
+            <div>
+              <p className="font-semibold text-foreground">General Secretary</p>
+              <p>Abraham Dafaru</p>
+              <p className="mt-1 inline-flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
+                secretary@obu.edu.et
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-5">
+        <Card id="send-message" className="scroll-mt-28 border-primary/10 shadow-sm lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Send Us a Message</CardTitle>
+          </CardHeader>
+          <CardContent>
           <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
-                Name
+                Full Name
               </label>
               <Input id="name" placeholder="Your full name" {...form.register("name")} />
               {form.formState.errors.name ? (
@@ -74,11 +130,21 @@ export function ContactForm() {
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                Email Address
               </label>
               <Input id="email" placeholder="you@example.com" {...form.register("email")} />
               {form.formState.errors.email ? (
                 <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="subject" className="text-sm font-medium">
+                Subject
+              </label>
+              <Input id="subject" placeholder="Subject of your message" {...form.register("subject")} />
+              {form.formState.errors.subject ? (
+                <p className="text-sm text-destructive">{form.formState.errors.subject.message}</p>
               ) : null}
             </div>
 
@@ -106,15 +172,15 @@ export function ContactForm() {
               ) : (
                 <>
                   <Send className="mr-2 h-4 w-4" />
-                  Submit Message
+                  Send Message
                 </>
               )}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card className="lg:col-span-2">
+        <Card className="border-primary/10 shadow-sm lg:col-span-2">
         <CardHeader>
           <CardTitle>Recent Submissions</CardTitle>
         </CardHeader>
@@ -139,7 +205,8 @@ export function ContactForm() {
             ))
           )}
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

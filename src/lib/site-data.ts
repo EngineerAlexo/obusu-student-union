@@ -4,8 +4,12 @@ export const navLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Events", href: "/events" },
   { label: "Announcements", href: "/announcements" },
-  { label: "Contact", href: "/contact" },
   { label: "Admin", href: "/admin" },
+  { label: "Contact", href: "/contact" },
+  { label: "Elections", href: "/elections" },
+  { label: "Union Structure", href: "/union-structure" },
+  { label: "Clubs", href: "/clubs" },
+  { label: "Leaders", href: "/leaders" },
 ];
 
 export const services: Service[] = [
